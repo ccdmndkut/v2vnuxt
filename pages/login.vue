@@ -1,5 +1,5 @@
 <template>
-  <v-layout
+  <!-- <v-layout
     column
     justify-center
     align-center>
@@ -22,12 +22,89 @@
         </v-card-actions>
       </v-card>
     </v-flex>
-  </v-layout>
+  </v-layout>-->
+  <div>
+    <h2>Login</h2>
+    <hr>
+    <v-alert 
+      v-model="hasError"
+      :value="hasError" 
+      dismissible 
+      type="error">
+      Please check credentials.
+    </v-alert>
+    <v-alert 
+      v-if="redirect" 
+      show
+    >
+      You have to login before accessing to
+      <strong>{{ redirect }}</strong>
+    </v-alert>
+   
+    <v-form 
+      id="login-form" 
+      @keydown.enter="handleLogin">
+ 
+      <v-text-field
+        ref="email" 
+        v-model="email" 
+        type="email" 
+        placeholder="Your Email..." 
+        required/>
+
+
+      <v-text-field
+        v-model="password" 
+        type="password" 
+        required 
+        placeholder="Your Password..."/>
+
+      <div class="text-right">
+        <v-btn 
+          outline
+          large
+          @click="handleLogin">Login with Firebase</v-btn>
+      </div>
+    </v-form>
+  </div>
 </template>
+
 
 <script>
 export default {
   layout: 'login',
-  components: {}
+  middleware: ['auth'],
+  data() {
+    return {
+      email: '',
+      password: '',
+      hasError: false
+    }
+  },
+  computed: {
+    redirect() {
+      return (
+        this.$route.query.redirect &&
+        decodeURIComponent(this.$route.query.redirect)
+      )
+    },
+    loginData() {
+      const data = {
+        email: this.email,
+        password: this.password
+      }
+      return data
+    }
+  },
+  mounted() {
+    this.$refs.email.focus()
+  },
+  methods: {
+    async handleLogin() {
+      return this.$auth.loginWith('firebase', this.loginData).catch(e => {
+        this.hasError = true
+      })
+    }
+  }
 }
 </script>

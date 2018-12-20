@@ -63,11 +63,10 @@ module.exports = {
   ],
   auth: {
     strategies: {
-      local: false,
       firebase: {
         _scheme: '~/services/firebase-auth.js',
-        apiKey: 'AIzaSyApB_tw8EabiOtZ193fu4VazZbM00jlPBA',
-        projectId: 'fire-tests'
+        apiKey: 'AIzaSyDMbILM1a366tYFM3-nOLwCUXapJ8ETqmw',
+        projectId: 'vaclaims-194006'
       }
     }
   },
