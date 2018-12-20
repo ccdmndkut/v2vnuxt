@@ -1,28 +1,10 @@
 <template>
   <v-app >
-
-    <v-toolbar
-      fixed
-      app
-    >
-      <v-btn
-        icon
-      >
-        <v-icon>web</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title"/>
-    </v-toolbar>
     <v-content>
       <v-container>
         <nuxt />
       </v-container>
     </v-content>
-    <v-footer
-      fixed
-      app
-    >
-      <span id="v2v">&copy; Vet2Vet</span>
-    </v-footer>
   </v-app>
 </template>
 
