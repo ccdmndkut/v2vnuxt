@@ -1,6 +1,6 @@
 import Cookie from 'js-cookie'
 import axios from 'axios'
-
+import fauth from '@/services/fireinit.js'
 export default class FirebaseScheme {
   constructor(auth, options) {
     this.auth = auth
@@ -26,11 +26,26 @@ export default class FirebaseScheme {
   }
 
   async login(userData) {
-    const loginRequestData = Object.assign({}, this.options, userData)
-    const { data } = await axios.post(this.loginUrl, loginRequestData)
-    this.auth.setToken(data.idToken)
-    this.auth.fetchUser(data)
+    await fauth.signInWithEmailAndPassword(userData)
+    const data = fauth.currentUser
+    // Handle Errors here.
+    // var errorCode = error.code;
+    // var errorMessage = error.message;
+    // [START_EXCLUDE]
+    // if (errorCode === 'auth/wrong-password') {
+    //   alert('Wrong password.');
+    // } else {
+    //   alert(errorMessage);
+    // }
+    // document.getElementById('quickstart-sign-in').disabled = false;
+    // [END_EXCLUDE]
+
+    // [END authwithemail]
   }
+  // const loginRequestData = Object.assign({}, this.options, userData)
+  // const { data } = await axios.post(this.loginUrl, loginRequestData)
+  // this.auth.setToken(data.idToken)
+  // this.auth.fetchUser(data)
 
   async fetchUser() {
     if (!this.auth.token) {

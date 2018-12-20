@@ -26,44 +26,48 @@
   <div>
     <h2>Login</h2>
     <hr>
-    <v-alert 
+    <v-alert
       v-model="hasError"
-      :value="hasError" 
-      dismissible 
-      type="error">
-      Please check credentials.
+      :value="hasError"
+      dismissible
+      type="error"
+    >
+      {{ error }}
     </v-alert>
-    <v-alert 
-      v-if="redirect" 
+    <v-alert
+      v-if="redirect"
       show
     >
       You have to login before accessing to
       <strong>{{ redirect }}</strong>
     </v-alert>
-   
-    <v-form 
-      id="login-form" 
-      @keydown.enter="handleLogin">
- 
-      <v-text-field
-        ref="email" 
-        v-model="email" 
-        type="email" 
-        placeholder="Your Email..." 
-        required/>
 
+    <v-form
+      id="login-form"
+      @keydown.enter="handleLogin"
+    >
 
       <v-text-field
-        v-model="password" 
-        type="password" 
-        required 
-        placeholder="Your Password..."/>
+        ref="email"
+        v-model="email"
+        type="email"
+        placeholder="Your Email..."
+        required
+      />
+
+      <v-text-field
+        v-model="password"
+        type="password"
+        required
+        placeholder="Your Password..."
+      />
 
       <div class="text-right">
-        <v-btn 
+        <v-btn
           outline
           large
-          @click="handleLogin">Login with Firebase</v-btn>
+          @click="handleLogin"
+        >Login with Firebase</v-btn>
       </div>
     </v-form>
   </div>
@@ -78,7 +82,8 @@ export default {
     return {
       email: '',
       password: '',
-      hasError: false
+      hasError: false,
+      error: null
     }
   },
   computed: {
@@ -87,6 +92,9 @@ export default {
         this.$route.query.redirect &&
         decodeURIComponent(this.$route.query.redirect)
       )
+    },
+    isCallback() {
+      return Boolean(this.$route.query.callback)
     },
     loginData() {
       const data = {
@@ -97,12 +105,16 @@ export default {
     }
   },
   mounted() {
-    this.$refs.email.focus()
+    // this.$refs.email.focus()
   },
   methods: {
     async handleLogin() {
+      this.hasError = false
+      this.error = null
       return this.$auth.loginWith('firebase', this.loginData).catch(e => {
         this.hasError = true
+        this.error = e + ''
+        console.log(e)
       })
     }
   }
